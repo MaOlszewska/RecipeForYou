@@ -3,14 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Lista piw</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-<form action="#" th:action="@{/beers{food}}" th:object="${params}" method="post">
-    <input type="text" th:field="*{food}" />
-    <input type="text" th:field="*{abv_gt}" />
-    <input type="text" th:field="*{abv_it}" />
-    <input type="submit" />
-</form>
-
+<div class="container">
+    <form action="#" th:action="@{/beers/food}" th:object="${params}" method="post">
+        <label>Szukaj piwa do dania:</label>
+        <input type="text" th:field="*{food}" />
+        <input type="submit" value="Szukaj" />
+    </form>
+</div>
+<hr>
+<div class="container">
+    <form action="#" th:action="@{/beers/alcohol}" th:object="${params}" method="post">
+        <label>Wybierz piwa o zawartości alkoholu większej niż:</label>
+        <input type="text" th:field="*{abv_gt}" />
+        <label>i mniejszej niż:</label>
+        <input type="text" th:field="*{abv_it}" />
+        <input type="submit" value="Szukaj" />
+    </form>
+</div>
 </body>
 </html>

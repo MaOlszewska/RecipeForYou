@@ -37,9 +37,8 @@ public class BeerService {
         }
     }
 
-    public String getBeerByAbv(double abvGt, double abvIt) throws IOException {
+    public String getBeerByAbv(Double abvGt, Double abvIt) throws IOException {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(BASE_URL + "beers").newBuilder();
-
         urlBuilder.addQueryParameter("abv_gt", String.valueOf(abvGt));
         urlBuilder.addQueryParameter("abv_lt", String.valueOf(abvIt));
         String url = urlBuilder.build().toString();
@@ -55,7 +54,6 @@ public class BeerService {
 
     public String getBeerByFood(String food) throws IOException {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(BASE_URL + "beers").newBuilder();
-
         urlBuilder.addQueryParameter("food", String.valueOf(food));
         String url = urlBuilder.build().toString();
 
