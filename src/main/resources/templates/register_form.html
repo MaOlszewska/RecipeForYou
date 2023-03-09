@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista piw</title>
+</head>
+<body>
+<form action="#" th:action="@{/beers{food}}" th:object="${params}" method="post">
+    <input type="text" th:field="*{food}" />
+    <input type="text" th:field="*{abv_gt}" />
+    <input type="text" th:field="*{abv_it}" />
+    <input type="submit" />
+</form>
+
+</body>
+</html>
