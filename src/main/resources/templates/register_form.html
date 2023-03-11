@@ -8,9 +8,9 @@
 <body>
 <div class="container">
     <form action="#" th:action="@{/beers/food}" th:object="${params}" method="post">
-        <label>Szukaj piwa do dania:</label>
-        <input type="text" th:field="*{food}" />
-        <input type="submit" value="Szukaj" />
+        <label>Show a list of beers that match the ingredient :</label>
+        <input type="text" th:field="*{ingredient}" />
+        <input type="submit" value="Show" />
     </form>
 </div>
 <hr>
@@ -20,7 +20,29 @@
         <input type="text" th:field="*{abv_gt}" />
         <label>i mniejszej niż:</label>
         <input type="text" th:field="*{abv_it}" />
-        <input type="submit" value="Szukaj" />
+        <input type="submit" value="Show" />
+    </form>
+</div>
+<hr>
+<div class="container">
+    <form action="#" th:action="@{/dishes/random}" method="post">
+        <label>Show a random dish</label>
+        <input type="submit" value="Show" />
+    </form>
+</div>
+<hr>
+<div class="container">
+    <form action="#" th:action="@{/dinner_set}" th:object="${params}" method="post">
+        <label>Show a dinner set that match the ingredient :</label>
+        <input type="text" th:field="*{ingredient}" />
+        <input type="submit" value="Show" />
+    </form>
+</div>
+<hr>
+<div class="container">
+    <form action="#" th:action="@{/beers/random}" method="post">
+        <label>Show a random beers</label>
+        <input type="submit" value="Show" />
     </form>
 </div>
 </body>

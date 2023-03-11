@@ -1,10 +1,10 @@
 body {
-    background-color: #fdf6e3;
+    background-color: #F5E9CF;
     font-family: sans-serif;
 }
 
 .container {
-    background-color: #eee8d5;
+    background-color: #7DB9B6;
     border-radius: 10px;
     width: 50%;
     margin-left: auto;
@@ -18,6 +18,7 @@ form {
     align-items: center;
     justify-content: center;
     margin-top: 20px;
+    color: #4D455D;
 }
 
 label {
@@ -28,14 +29,14 @@ label {
 input[type="text"] {
     width: 50%;
     border-radius: 5px;
-    border: 1px solid #d3d3d3;
+    border: 1px solid #4D455D;
     margin-bottom: 10px;
     padding: 5px;
 }
 
 input[type="submit"] {
     padding: 5px 10px;
-    background-color: #cb4b16;
+    background-color: #E96479;
     color: #fff;
     border-radius: 5px;
     cursor: pointer;
@@ -44,9 +45,52 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-    background-color: #813113;
+    background-color: #833a47;
 }
 
+.container-dish h1 {
+    font-size: 32px;
+    margin-bottom: 5px;
+}
+
+.container-dish p {
+    font-size: 16px;
+    margin-bottom: 5px;
+    text-align: left;
+    width: 80%;
+}
+.container-dish {
+    background-color: #7DB9B6;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+}
+
+.container-dish img {
+    height: 200px;
+    margin-right: 20px;
+    float: left;
+}
+
+hr {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    height:2px;
+    background-color: #4D455D;
+}
+
+a {
+    color: #4D455D;
+}
+
+a:hover {
+    color: #372e48;
+}
 
 
 

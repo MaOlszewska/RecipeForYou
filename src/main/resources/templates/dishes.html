@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dinner Set</title>
+    <style>
+        body {
+            background-color: #F5E9CF;
+            font-family: sans-serif;
+        }
+        .container-dish {
+            background-color: #7DB9B6;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 20px;
+        }
+
+        /* Styl dla obrazka */
+        .img {
+            height: 400px;
+            margin-right: 20px;
+            float: right;
+        }
+
+        .container-dish h1 {
+            font-size: 32px;
+
+        }
+
+        .container-dish p {
+            font-size: 16px;
+            text-align: left;
+            width: 70%;
+        }
+        a {
+            color: #4D455D;
+        }
+
+        a:hover {
+            color: #372e48;
+        }
+    </style>
+</head>
+<body>
+<div class="container-dish">
+    <h1 style="text-align: center">Random Dish</h1>
+    <img class="img" th:src="${dish.strMealThumb}" alt="Dish thumbnail">
+    <h2>Name</h2>
+    <p th:text="${dish.strMeal}"></p>
+    <h2>Category</h2>
+    <p th:text="${dish.strCategory}"></p>
+    <h2>Instructions</h2>
+    <p th:text="${dish.strInstructions}"></p>
+    <h2>Source</h2>
+    <a th:href="${dish.strSource}"> Click to see the recipe </a>
+</div>
+</body>
+</html>

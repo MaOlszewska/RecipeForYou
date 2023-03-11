@@ -19,17 +19,28 @@ public class BeerController {
     ObjectMapper objectMapper = new ObjectMapper();
 
     @GetMapping("beers/random")
-    public ModelAndView getRandomBeer() throws IOException {
+    public ModelAndView getRandomBeers() throws IOException {
         String responseBody = beerService.getRandomBeer();
         List<Beer> beers = objectMapper.readValue(responseBody, new TypeReference<List<Beer>>() {
         });
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("list");
+        modelAndView.setViewName("beers");
         modelAndView.addObject("beers", beers);
         return modelAndView;
     }
 
+    @PostMapping("beers/random")
+    public ModelAndView showRandomBeers() throws IOException {
+        String responseBody = beerService.getRandomBeer();
+        List<Beer> beers = objectMapper.readValue(responseBody, new TypeReference<List<Beer>>() {
+        });
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("beers");
+        modelAndView.addObject("beers", beers);
+        return modelAndView;
+    }
     @PostMapping("beers/alcohol")
     public ModelAndView getBeerByAbv(@ModelAttribute("params") Params params) throws IOException {
         System.out.println(params.getAbv_gt());
@@ -38,19 +49,19 @@ public class BeerController {
         });
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("list");
+        modelAndView.setViewName("beers");
         modelAndView.addObject("beers", beers);
         return modelAndView;
     }
 
     @PostMapping("beers/food")
     public ModelAndView getBeerByFood(@ModelAttribute("params") Params params) throws IOException {
-        String responseBody = beerService.getBeerByFood(params.getFood());
+        String responseBody = beerService.getBeerByFood(params.getIngredient());
         List<Beer> beers = objectMapper.readValue(responseBody, new TypeReference<List<Beer>>() {
         });
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("list");
+        modelAndView.setViewName("beers");
         modelAndView.addObject("beers", beers);
         return modelAndView;
     }

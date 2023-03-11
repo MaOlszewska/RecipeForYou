@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List of Beers</title>
+       <style>
+           body {
+               background-color: #F5E9CF;
+               font-family: sans-serif;
+           }
+           .container {
+               background-color: #7DB9B6;
+               border-radius: 10px;
+               width: 80%;
+               margin-left: auto;
+               margin-right: auto;
+               padding: 20px;
+               margin-bottom: 5px;
+           }
+           hr {
+               margin-left: auto;
+               margin-right: auto;
+               height:2px;
+               background-color: #4D455D;
+           }
+
+
+       </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 style="text-align: center" >List of Beers</h1>
+</div>
+<div class="container">
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>ABV </th>
+            <th>Description</th>
+            <th>Match to</th>
+            <th>Image</th>
+        </tr>
+        </thead>
+        <tbody>
+        <div th:each="beer : ${beers}">
+            <tr >
+                <td th:text="${beer.name}"></td>
+                <td th:text="${beer.abv}"></td>
+                <td th:text="${beer.description}"></td>
+                <td th:text="${beer.food_pairing}"></td>
+                <td><img th:src="@{${beer.image_url}}" height="60px" /></td>
+            </tr>
+            <tr>
+                <td colspan="5"><hr></td>
+            </tr>
+        </div>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
