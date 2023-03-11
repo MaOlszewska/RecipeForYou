@@ -1,16 +1,11 @@
-package com.example.demo;
+package com.example.demo.Services;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-
 import java.io.IOException;
-import java.util.List;
 
 @Service
 public class BeerService {

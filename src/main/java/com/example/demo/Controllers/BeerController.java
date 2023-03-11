@@ -1,5 +1,8 @@
-package com.example.demo;
+package com.example.demo.Controllers;
 
+import com.example.demo.Services.BeerService;
+import com.example.demo.model.Beer;
+import com.example.demo.model.Params;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +17,6 @@ public class BeerController {
     @Autowired
     private BeerService beerService;
     ObjectMapper objectMapper = new ObjectMapper();
-
-
 
     @GetMapping("beers/random")
     public ModelAndView getRandomBeer() throws IOException {
