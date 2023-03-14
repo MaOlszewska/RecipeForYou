@@ -1,70 +1,84 @@
 package com.example.demo.Controllers;
 
+import com.example.demo.Exceptions.BeerNotFoundException;
 import com.example.demo.Services.BeerService;
 import com.example.demo.model.Beer;
 import com.example.demo.model.Params;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class BeerController {
     @Autowired
     private BeerService beerService;
-    ObjectMapper objectMapper = new ObjectMapper();
+
+    private final String BEER_VIEW_NAME = "beers";
 
     @GetMapping("beers/random")
     public ModelAndView getRandomBeers() throws IOException {
-        String responseBody = beerService.getRandomBeer();
-        List<Beer> beers = objectMapper.readValue(responseBody, new TypeReference<List<Beer>>() {
-        });
+        Optional<List<Beer>> beers = beerService.getRandomBeer();
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("beers");
-        modelAndView.addObject("beers", beers);
-        return modelAndView;
+        if(beers.isPresent()){
+            return createBeerView(BEER_VIEW_NAME,beers.get());
+        } else {
+            throw new BeerNotFoundException();
+        }
     }
 
     @PostMapping("beers/random")
     public ModelAndView showRandomBeers() throws IOException {
-        String responseBody = beerService.getRandomBeer();
-        List<Beer> beers = objectMapper.readValue(responseBody, new TypeReference<List<Beer>>() {
-        });
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("beers");
-        modelAndView.addObject("beers", beers);
-        return modelAndView;
+        Optional<List<Beer>> beers = beerService.getRandomBeer();
+        if(beers.isPresent()){
+            return createBeerView(BEER_VIEW_NAME, beers.get());
+        } else {
+            throw new BeerNotFoundException();
+        }
     }
-    @PostMapping("beers/alcohol")
+    @PostMapping("beers/abv")
     public ModelAndView getBeerByAbv(@ModelAttribute("params") Params params) throws IOException {
-        System.out.println(params.getAbv_gt());
-        String responseBody = beerService.getBeerByAbv(params.getAbv_gt(), params.getAbv_it());
-        List<Beer> beers = objectMapper.readValue(responseBody, new TypeReference<List<Beer>>() {
-        });
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("beers");
-        modelAndView.addObject("beers", beers);
-        return modelAndView;
+        Optional<List<Beer>> beers = beerService.getBeerByAbv(params.getAbv_gt(), params.getAbv_it());
+        if(beers.isPresent()){
+            return createBeerView(BEER_VIEW_NAME, beers.get());
+        } else {
+            throw new BeerNotFoundException(params.getAbv_gt(), params.getAbv_it());
+        }
     }
 
     @PostMapping("beers/food")
     public ModelAndView getBeerByFood(@ModelAttribute("params") Params params) throws IOException {
-        String responseBody = beerService.getBeerByFood(params.getIngredient());
-        List<Beer> beers = objectMapper.readValue(responseBody, new TypeReference<List<Beer>>() {
-        });
+        Optional<List<Beer>> beers = beerService.getBeerByFood(params.getIngredient());
+        if(beers.isPresent()){
+            System.out.println(beers);
+            return createBeerView(BEER_VIEW_NAME, beers.get());
+        } else {
+            throw new BeerNotFoundException(params.getIngredient());
+        }
+    }
 
+    @GetMapping("beers/food")
+    public ModelAndView getBeerByFood(@RequestParam("i") String i) {
+        try {
+            Optional<List<Beer>> beers = beerService.getBeerByFood(i);
+            if (beers.isPresent()) {
+                return createBeerView(BEER_VIEW_NAME, beers.get());
+            } else {
+                throw new BeerNotFoundException(i);
+            }
+        }  catch (IOException e) {
+            return null;
+        }
+    }
+
+    private ModelAndView createBeerView(String name, List<Beer> beers){
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("beers");
+        modelAndView.setViewName(name);
         modelAndView.addObject("beers", beers);
         return modelAndView;
     }
-
 
 }
