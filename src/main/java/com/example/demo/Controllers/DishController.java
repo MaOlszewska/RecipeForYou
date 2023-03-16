@@ -8,6 +8,8 @@ import com.example.demo.model.Dish;
 import com.example.demo.model.DishResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -27,20 +30,19 @@ public class DishController {
     private final String DISH_VIEW_NAME = "dishes";
 
     @GetMapping("dishes/random")
-    public String getRandomDish() throws IOException {
+    public ResponseEntity<Object> getRandomDish() throws IOException {
         Optional<DishResponse> dishResponse = dishService.getRandomDish();
 
         if(dishResponse.isPresent()){
-            return dishResponse.get().getMeals().get(0).toString();
+            return ResponseEntity.ok(dishResponse.get().getMeals().get(0));
         } else {
-            throw new DishNotFoundException();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body( new DishNotFoundException().getMessage());
         }
     }
 
     @PostMapping("dishes/random")
     public ModelAndView getRandomDishAndShow() throws IOException {
         Optional<DishResponse> responseBodyRandom = dishService.getRandomDish();
-
 
         DishResponse dishResponse;
         if (responseBodyRandom.isPresent()) {
@@ -62,16 +64,15 @@ public class DishController {
     }
 
 
-    @GetMapping("dishes{i}")
-    public String getDishByIngredient(@RequestParam("i") String ingredient) throws IOException {
+    @GetMapping("dishes")
+    public ResponseEntity<Object> getDishByIngredient(@RequestParam("i") String ingredient) throws IOException {
         Optional<DishResponse> responseBodyRandom = dishService.getDishByIngredient(ingredient);
-
 
         DishResponse dishResponse;
         if (responseBodyRandom.isPresent()) {
             dishResponse = responseBodyRandom.get();
         } else {
-            throw new DishNotFoundException(ingredient);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body( new DishNotFoundException(ingredient).getMessage());
         }
 
         Optional<DishResponse> responseBody = dishService.getDeatilsDishById(dishResponse.getMeals().get(0).getIdMeal().longValue());
@@ -80,9 +81,9 @@ public class DishController {
         if (responseBody.isPresent()) {
             dish = responseBodyRandom.get();
         } else {
-            throw new DishNotFoundException(ingredient);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body( new DishNotFoundException(ingredient).getMessage());
         }
-        return dish.getMeals().get(0).toString();
+        return ResponseEntity.ok(dish.getMeals().get(0));
     }
 
     private ModelAndView createDishView(String name, Dish dish){

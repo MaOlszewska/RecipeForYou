@@ -32,7 +32,7 @@
 </div>
 <hr>
 <div class="container">
-    <form action="#" th:action="@{/dinner_set}" th:object="${params}" method="post">
+    <form action="#" th:action="@{/dinner-sets}" th:object="${params}" method="post">
         <label>Show a dinner set that match the ingredient :</label>
         <input type="text" th:field="*{ingredient}" />
         <input type="submit" value="Show" />

@@ -8,10 +8,13 @@ import com.example.demo.Services.DishService;
 import com.example.demo.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -37,18 +40,18 @@ public class ApplicationController {
         return modelAndView;
     }
 
-    @GetMapping("/dinner_set")
-    public ModelAndView getDinnerSet(@RequestParam("i") String ingredient) throws IOException {
+    @GetMapping("/dinner-sets")
+    public ResponseEntity<Object> getDinnerSet(@RequestParam("i") String ingredient) throws IOException {
         Dish dish = getDishByIngredient(ingredient);
         Beer beer = getBeerByIngredient(ingredient);
 
         DinnerSet set = objectMapper.convertValue(dish, DinnerSet.class);
         objectMapper.updateValue(set, beer);
 
-        return createSetView(SET_VIEW_NAME, set,"dinnerSet");
+        return ResponseEntity.ok(set);
     }
 
-    @PostMapping("/dinner_set")
+    @PostMapping("/dinner-sets")
     public ModelAndView showDinnerSet(@ModelAttribute("params") Params params) throws IOException {
         validateParams(params);
 
@@ -75,8 +78,7 @@ public class ApplicationController {
     }
 
     private Beer getBeerByIngredient(String ingredient) throws IOException {
-
-        Optional<List<Beer>> beers = beerService.getBeerByFood(ingredient);
+        Optional<List<Beer>> beers = beerService.getBeerByIngredient(ingredient);
         if (beers.isPresent()) {
             List<Beer> beer = beers.get();
             return beers.get().get(new Random().nextInt(beer.size()));
@@ -105,6 +107,16 @@ public class ApplicationController {
         } else {
             throw new DishNotFoundException(ingredient);
         }
+    }
+
+
+    @GetMapping(value = "/swagger.yaml", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getSwaggerJson() throws IOException {
+        // Wczytaj plik swagger.json z katalogu resources
+        InputStream inputStream = getClass().getResourceAsStream("/static/swagger.yaml");
+        String swaggerJson = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+
+        return ResponseEntity.ok(swaggerJson);
     }
 
 }
