@@ -7,11 +7,14 @@ import com.example.demo.Services.BeerService;
 import com.example.demo.model.Beer;
 import com.example.demo.model.Params;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -22,12 +25,12 @@ public class BeerController {
     private final String BEER_VIEW_NAME = "beers";
 
     @GetMapping("beers/random")
-    public ModelAndView getRandomBeers() throws IOException {
+    public ResponseEntity<Object> getRandomBeers() throws IOException {
         Optional<List<Beer>> beers = beerService.getRandomBeer();
         if (beers.isPresent()) {
-            return createBeerView(BEER_VIEW_NAME, beers.get());
+            return ResponseEntity.ok(beers.get());
         } else {
-            throw new BeerNotFoundException();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body( new BeerNotFoundException().getMessage());
         }
     }
 
@@ -52,10 +55,10 @@ public class BeerController {
         }
     }
 
-    @PostMapping("beers/food")
+    @PostMapping("beers/ingredient")
     public ModelAndView getBeerByFood(@ModelAttribute("params") Params params) throws IOException {
         validateParamsWithIngredient(params);
-        Optional<List<Beer>> beers = beerService.getBeerByFood(params.getIngredient());
+        Optional<List<Beer>> beers = beerService.getBeerByIngredient(params.getIngredient());
         if (beers.isPresent()) {
             return createBeerView(BEER_VIEW_NAME, beers.get());
         } else {
@@ -63,14 +66,17 @@ public class BeerController {
         }
     }
 
-    @GetMapping("beers/food")
-    public ModelAndView getBeerByFood(@RequestParam("i") String i) {
+    @GetMapping("beers/ingredient")
+    public ResponseEntity<Object> getBeerByFood(@RequestParam("i") String i) {
         try {
-            Optional<List<Beer>> beers = beerService.getBeerByFood(i);
+            if (i.equals("")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new MissingParametersException().getMessage());
+            }
+            Optional<List<Beer>> beers = beerService.getBeerByIngredient(i);
             if (beers.isPresent()) {
-                return createBeerView(BEER_VIEW_NAME, beers.get());
+                return ResponseEntity.ok(beers.get());
             } else {
-                throw new BeerNotFoundException(i);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body( new BeerNotFoundException(i).getMessage());
             }
         } catch (IOException e) {
             return null;

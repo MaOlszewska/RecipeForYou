@@ -41,9 +41,9 @@ public class BeerService {
         }
     }
 
-    public Optional<List<Beer>> getBeerByFood(String food) throws IOException {
+    public Optional<List<Beer>> getBeerByIngredient(String ingredient) throws IOException {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(BASE_URL + "beers").newBuilder();
-        urlBuilder.addQueryParameter("food", String.valueOf(food));
+        urlBuilder.addQueryParameter("food", String.valueOf(ingredient));
         String url = urlBuilder.build().toString();
 
         Request request = new Request.Builder()

@@ -82,7 +82,7 @@
         }
       }
     },
-    "/beers/food": {
+    "/beers/ingredient": {
       "get": {
         "tags": [
           "beers"

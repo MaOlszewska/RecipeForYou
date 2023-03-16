@@ -1,0 +1,184 @@
+swagger: '2.0'
+info:
+  title: RecipeForYou
+  description: This API allows you to get information about beers, dishes also dinner sets.
+  version: 1.0.0
+host: localhost:8080
+basePath: /
+tags:
+  - name: beers
+    description: Operations related to beers
+  - name: dishes
+    description: Operations related to dishes
+  - name: dinnerSets
+    description: Operations related to dinner sets
+schemes:
+  - http
+paths:
+  /beers/random:
+    get:
+      tags:
+        - "beers"
+      summary: "Get a list of random beers"
+      description: "Returns a random beer with details."
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "A list of random beers"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Beer"
+        404:
+          description: "Beers Not Found"
+  /beers/ingredient:
+    get:
+      tags:
+        - "beers"
+      summary: "Get a list of beers by ingredient"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "i"
+          in: "query"
+          description: "The ingredient to search for"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "A list of beers containing the specified ingredient"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Beer"
+        400:
+          description: "Parameters is Missing"
+        404:
+          description: "Beers Not Found"
+  /dishes/random:
+    get:
+      tags:
+        - "dishes"
+      summary: "Get a list of random dish"
+      description: "Returns a random dish with details."
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "One random dish"
+          schema:
+            $ref: "#/definitions/Dish"
+        404:
+          description: "Dish Not Found"
+  /dishes:
+    get:
+      tags:
+        - "dishes"
+      summary: "Get dish by ingredient"
+      description: "Returns a dish with details based on the specified ingredient."
+      produces:
+        - "application/json"
+      parameters:
+        - name: "i"
+          in: "query"
+          description: "The ingredient to search for"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "A dish object"
+          schema:
+            $ref: "#/definitions/Dish"
+        404:
+          description: "Dish not found"
+  /dinner-sets:
+    get:
+      tags:
+        - "dinnerSets"
+      summary: "Get beer and dish by ingredient"
+      description: "Returns a dish and beer with details based on the specified ingredient."
+      produces:
+        - "application/json"
+      parameters:
+        - name: "i"
+          in: "query"
+          description: "The ingredient to search for"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "A dinner object"
+          schema:
+            $ref: "#/definitions/DinnerSet"
+
+definitions:
+  Beer:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        example: 1
+      name:
+        type: "string"
+        example: "Brewdog Punk IPA"
+      abv:
+        type: "number"
+        example: 5.6
+      description:
+        type: "string"
+        example: "A classic IPA with a hoppy aroma and a crisp, bitter finish"
+      food_pairing:
+        type: "string"
+      image_url:
+        type: "string"
+  Dish:
+    type: "object"
+    properties:
+      idMeal:
+        type: "integer"
+        example: 1
+      strMeal:
+        type: "string"
+        example: "Brewdog Punk IPA"
+      strCategory:
+        type: "string"
+      strInstructions:
+        type: "string"
+      strSource:
+        type: "string"
+      strMealThumb:
+        type: "string"
+  DinnerSet:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        example: 1
+      name:
+        type: "string"
+        example: "Brewdog Punk IPA"
+      abv:
+        type: "number"
+        example: 5.6
+      description:
+        type: "string"
+        example: "A classic IPA with a hoppy aroma and a crisp, bitter finish"
+      food_pairing:
+        type: "string"
+      image_url:
+        type: "string"
+      idMeal:
+        type: "integer"
+        example: 1
+      strMeal:
+        type: "string"
+        example: "Brewdog Punk IPA"
+      strCategory:
+        type: "string"
+      strInstructions:
+        type: "string"
+      strSource:
+        type: "string"
+      strMealThumb:
+        type: "string"

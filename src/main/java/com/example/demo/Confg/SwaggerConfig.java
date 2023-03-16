@@ -19,9 +19,9 @@ public class SwaggerConfig {
     public SwaggerResourcesProvider swaggerResourcesProvider(InMemorySwaggerResourcesProvider defaultResourcesProvider) {
         return () -> {
             SwaggerResource wsResource = new SwaggerResource();
-            wsResource.setName("new spec");
+            wsResource.setName("internal");
             wsResource.setSwaggerVersion("2.0");
-            wsResource.setLocation("/swagger.json");
+            wsResource.setLocation("/swagger.yaml");
 
             List<SwaggerResource> resources = new ArrayList<>(defaultResourcesProvider.get());
             resources.add(wsResource);
