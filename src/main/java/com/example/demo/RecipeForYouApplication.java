@@ -16,17 +16,17 @@ import static springfox.documentation.spi.DocumentationType.SWAGGER_2;
 @SpringBootApplication
 public class RecipeForYouApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(RecipeForYouApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(RecipeForYouApplication.class, args);
+    }
 
-	@Bean
-	public Docket swagger() {
-		return new Docket(SWAGGER_2)
-				.select()
-				.apis(RequestHandlerSelectors.any())
-				.paths(PathSelectors.any())
-				.build();
-	}
+    @Bean
+    public Docket swagger() {
+        return new Docket(SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.any())
+                .build();
+    }
 
 }

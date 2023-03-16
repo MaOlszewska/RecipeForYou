@@ -14,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -30,7 +29,7 @@ public class BeerController {
         if (beers.isPresent()) {
             return ResponseEntity.ok(beers.get());
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body( new BeerNotFoundException().getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new BeerNotFoundException().getMessage());
         }
     }
 
@@ -70,13 +69,13 @@ public class BeerController {
     public ResponseEntity<Object> getBeerByFood(@RequestParam("i") String i) {
         try {
             if (i.equals("")) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new MissingParametersException().getMessage());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MissingParametersException().getMessage());
             }
             Optional<List<Beer>> beers = beerService.getBeerByIngredient(i);
             if (beers.isPresent()) {
                 return ResponseEntity.ok(beers.get());
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body( new BeerNotFoundException(i).getMessage());
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new BeerNotFoundException(i).getMessage());
             }
         } catch (IOException e) {
             return null;

@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -29,6 +30,13 @@ public class ApplicationController {
     private final String SET_VIEW_NAME = "dinnerSet";
     private final String SET_FORM_NAME = "form";
     ObjectMapper objectMapper = new ObjectMapper();
+
+    @GetMapping("/")
+    public ModelAndView showMainPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index");
+        return modelAndView;
+    }
 
     @GetMapping("/form")
     public ModelAndView showForm() {
@@ -61,9 +69,8 @@ public class ApplicationController {
         DinnerSet set = objectMapper.convertValue(dish, DinnerSet.class);
         objectMapper.updateValue(set, beer);
 
-        return createSetView(SET_VIEW_NAME, set,"dinnerSet");
+        return createSetView(SET_VIEW_NAME, set, "dinnerSet");
     }
-
 
     private Dish getDishByIngredient(String ingredient) throws IOException {
         Optional<DishResponse> responseBodyRandom = dishService.getDishByIngredient(ingredient);
@@ -101,14 +108,13 @@ public class ApplicationController {
         }
     }
 
-    private DishResponse getResponse(Optional<DishResponse> response, String ingredient){
+    private DishResponse getResponse(Optional<DishResponse> response, String ingredient) {
         if (response.isPresent()) {
             return response.get();
         } else {
             throw new DishNotFoundException(ingredient);
         }
     }
-
 
     @GetMapping(value = "/swagger.yaml", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getSwaggerJson() throws IOException {

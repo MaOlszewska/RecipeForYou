@@ -8,6 +8,7 @@ public class DishNotFoundException extends RuntimeException {
     public DishNotFoundException(String i) {
         super("Dish with Ingredient:  " + i + " Not found");
     }
+
     public DishNotFoundException() {
         super("Dish Not found");
     }
