@@ -1,0 +1,194 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Beer API",
+    "description": "This API allows you to get information about beers.",
+    "version": "1.0.0"
+  },
+  "host": "localhost:8080",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "beers",
+      "description": "Operations related to beers"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/beers/random": {
+      "get": {
+        "tags": [
+          "beers"
+        ],
+        "description": "Returns a list of random beers.",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of beers",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Beer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/static/swagger.json": {
+      "get": {
+        "parameters": [],
+        "responses": {
+          "default": {
+            "description": "A list of beers"
+          }
+        }
+      }
+    },
+    "/beers/abv": {
+      "post": {
+        "tags": [
+          "beers"
+        ],
+        "description": "Returns a list of beers with the specified ABV value.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "params",
+            "description": "ABV values for filtering beers",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Params"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of beers",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Beer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/beers/food": {
+      "get": {
+        "tags": [
+          "beers"
+        ],
+        "description": "Returns a list of beers that pair well with the specified food ingredient.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "i",
+            "description": "Food ingredient for filtering beers",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of beers",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Beer"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "beers"
+        ],
+        "description": "Returns a list of beers that pair well with the specified food ingredient.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "params",
+            "description": "Food ingredient for filtering beers",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Params"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of beers",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Beer"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Beer": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "tagline": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "abv": {
+          "type": "number",
+          "format": "float"
+        },
+        "ibu": {
+          "type": "number",
+          "format": "float"
+        },
+        "food_pairing": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Params": {
+      "type": "object",
+      "properties": {
+        "abv_gt": {
+          "type": "number",
+          "format": "float"
+        },
+        "abv_it": {
+          "type": "number",
+          "format": "float"
+        },
+        "ingredient": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

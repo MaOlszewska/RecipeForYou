@@ -7,11 +7,18 @@ import com.example.demo.Services.BeerService;
 import com.example.demo.Services.DishService;
 import com.example.demo.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.models.Swagger;
+import io.swagger.parser.SwaggerParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -105,6 +112,22 @@ public class ApplicationController {
         } else {
             throw new DishNotFoundException(ingredient);
         }
+    }
+
+//    @GetMapping(value = "/swagger.yaml", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<Swagger> getSwagger() throws IOException {
+//        InputStream inputStream = getClass().getResourceAsStream("/static/swagger.yaml");
+//        Swagger swagger = new SwaggerParser().parse(inputStream);
+//        return ResponseEntity.ok(swagger);
+//    }
+
+    @GetMapping(value = "/swagger.json", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getSwaggerJson() throws IOException {
+        // Wczytaj plik swagger.json z katalogu resources
+        InputStream inputStream = getClass().getResourceAsStream("/static/swagger.json");
+        String swaggerJson = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+
+        return ResponseEntity.ok(swaggerJson);
     }
 
 }
