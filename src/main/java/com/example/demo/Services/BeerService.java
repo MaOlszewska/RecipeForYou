@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -15,20 +16,13 @@ public class BeerService {
     private final OkHttpClient client = new OkHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public Optional<List<Beer>> getRandomBeer()  throws IOException {
+    public Optional<List<Beer>> getRandomBeer() throws IOException {
         Request request = new Request.Builder()
                 .url(BASE_URL + "beers/random")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-            if(response.isSuccessful()){
-                String responseBody = response.body().string();
-                List<Beer> beers = objectMapper.readValue(responseBody, new TypeReference<List<Beer>>() { });
-                if(!beers.isEmpty()){
-                    return Optional.ofNullable(beers);
-                }
-            }
-            return Optional.empty();
+            return checkResponse(response);
         }
     }
 
@@ -43,14 +37,7 @@ public class BeerService {
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-            if(response.isSuccessful()){
-                String responseBody = response.body().string();
-                List<Beer> beers = objectMapper.readValue(responseBody, new TypeReference<List<Beer>>() { });
-                if(!beers.isEmpty()){
-                    return Optional.ofNullable(beers);
-                }
-            }
-            return Optional.empty();
+            return checkResponse(response);
         }
     }
 
@@ -64,14 +51,19 @@ public class BeerService {
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-            if(response.isSuccessful()){
-                String responseBody = response.body().string();
-                List<Beer> beers = objectMapper.readValue(responseBody, new TypeReference<List<Beer>>() { });
-                if(!beers.isEmpty()){
-                    return Optional.ofNullable(beers);
-                    }
-                }
-            return Optional.empty();
+            return checkResponse(response);
         }
+    }
+
+    private Optional<List<Beer>> checkResponse(Response response) throws IOException {
+        if (response.isSuccessful()) {
+            String responseBody = response.body().string();
+            List<Beer> beers = objectMapper.readValue(responseBody, new TypeReference<List<Beer>>() {
+            });
+            if (!beers.isEmpty()) {
+                return Optional.of(beers);
+            }
+        }
+        return Optional.empty();
     }
 }

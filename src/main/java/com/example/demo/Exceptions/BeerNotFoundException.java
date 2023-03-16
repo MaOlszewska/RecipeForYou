@@ -10,7 +10,7 @@ public class BeerNotFoundException extends RuntimeException {
     }
 
     public BeerNotFoundException(Double abvGt, Double abvIt) {
-        super("Beer between " + abvGt.toString() + "-" + abvIt.toString() +    " Abv Not Found");
+        super("Beer between " + abvGt.toString() + "-" + abvIt.toString() + " Abv Not Found");
     }
 
     public BeerNotFoundException() {

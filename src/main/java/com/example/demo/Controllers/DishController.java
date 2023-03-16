@@ -1,6 +1,10 @@
 package com.example.demo.Controllers;
 
+import com.example.demo.Exceptions.BeerNotFoundException;
+import com.example.demo.Exceptions.DishNotFoundException;
 import com.example.demo.Services.DishService;
+import com.example.demo.model.Beer;
+import com.example.demo.model.Dish;
 import com.example.demo.model.DishResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class DishController {
@@ -18,36 +24,71 @@ public class DishController {
     private DishService dishService;
     ObjectMapper objectMapper = new ObjectMapper();
 
+    private final String DISH_VIEW_NAME = "dishes";
+
     @GetMapping("dishes/random")
     public String getRandomDish() throws IOException {
-        String responseBody = dishService.getRandomDish();
-        DishResponse dish = objectMapper.readValue(responseBody, DishResponse.class);
-        return dish.getMeals().toString();
+        Optional<DishResponse> dishResponse = dishService.getRandomDish();
+
+        if(dishResponse.isPresent()){
+            return dishResponse.get().getMeals().get(0).toString();
+        } else {
+            throw new DishNotFoundException();
+        }
     }
 
     @PostMapping("dishes/random")
     public ModelAndView getRandomDishAndShow() throws IOException {
-        String responseBodyRandom = dishService.getRandomDish();
-        DishResponse dishResponse = objectMapper.readValue(responseBodyRandom, DishResponse.class);
+        Optional<DishResponse> responseBodyRandom = dishService.getRandomDish();
 
-        String responseBody = dishService.getDeatilsDishById(dishResponse.getMeals().get(0).getIdMeal().longValue());
-        DishResponse dish = objectMapper.readValue(responseBody, DishResponse.class);
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("dishes");
-        modelAndView.addObject("dish", dish.getMeals().get(0));
-        return modelAndView;
+        DishResponse dishResponse;
+        if (responseBodyRandom.isPresent()) {
+            dishResponse = responseBodyRandom.get();
+        } else {
+            throw new DishNotFoundException();
+        }
+
+        Optional<DishResponse> responseBody = dishService.getDeatilsDishById(dishResponse.getMeals().get(0).getIdMeal().longValue());
+
+        DishResponse dish;
+        if (responseBody.isPresent()) {
+            dish = responseBodyRandom.get();
+        } else {
+            throw new DishNotFoundException();
+        }
+
+        return createDishView(DISH_VIEW_NAME, dish.getMeals().get(0));
     }
 
 
     @GetMapping("dishes{i}")
     public String getDishByIngredient(@RequestParam("i") String ingredient) throws IOException {
-        String responseBodyByIngredient = dishService.getDishByIngredient(ingredient);
-        DishResponse dishByIngeredient = objectMapper.readValue(responseBodyByIngredient, DishResponse.class);
+        Optional<DishResponse> responseBodyRandom = dishService.getDishByIngredient(ingredient);
 
-        String responseBody = dishService.getDeatilsDishById(dishByIngeredient.getMeals().get(0).getIdMeal().longValue());
-        DishResponse dish = objectMapper.readValue(responseBody, DishResponse.class);
+
+        DishResponse dishResponse;
+        if (responseBodyRandom.isPresent()) {
+            dishResponse = responseBodyRandom.get();
+        } else {
+            throw new DishNotFoundException(ingredient);
+        }
+
+        Optional<DishResponse> responseBody = dishService.getDeatilsDishById(dishResponse.getMeals().get(0).getIdMeal().longValue());
+
+        DishResponse dish;
+        if (responseBody.isPresent()) {
+            dish = responseBodyRandom.get();
+        } else {
+            throw new DishNotFoundException(ingredient);
+        }
         return dish.getMeals().get(0).toString();
+    }
 
+    private ModelAndView createDishView(String name, Dish dish){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(name);
+        modelAndView.addObject("dish", dish);
+        return modelAndView;
     }
 }

@@ -15,7 +15,7 @@
 </div>
 <hr>
 <div class="container">
-    <form action="#" th:action="@{/beers/alcohol}" th:object="${params}" method="post">
+    <form action="#" th:action="@{/beers/abv}" th:object="${params}" method="post">
         <label>Wybierz piwa o zawartości alkoholu większej niż:</label>
         <input type="text" th:field="*{abv_gt}" />
         <label>i mniejszej niż:</label>
